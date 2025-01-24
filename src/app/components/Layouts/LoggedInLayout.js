@@ -1,4 +1,4 @@
-import { Sidebar } from "./Sidebar";
+import { Sidebar } from "@/app/components/Layouts/Sidebar";
 
 export function LoggedInLayout({ children }) {
   return (

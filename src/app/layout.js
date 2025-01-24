@@ -1,5 +1,5 @@
 import "./globals.css";
-import { ClientLayoutWrapper } from "./components/Layouts/ClientLayoutWrapper";
+import { ClientLayoutWrapper } from "@/app/components/Layouts/ClientLayoutWrapper";
 
 export const metadata = {
   title: "Rain Chat",

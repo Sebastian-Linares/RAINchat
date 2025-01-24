@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import ConversationsService from "@/app/services/conversationsService";
+import ConversationsService from "@/app/api/services/conversationsService";
 
 export async function POST(request) {
   try {

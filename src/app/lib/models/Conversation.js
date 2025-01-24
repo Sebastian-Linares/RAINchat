@@ -1,6 +1,8 @@
-import { apiService } from "../services/api";
+import { apiService } from "@/app/lib/services/api";
 
 class Conversation {
+  static apiRoute = "/conversations";
+
   constructor({ id, userId, startAt, duration, agentId, createdAt }) {
     this.id = id;
     this.userId = userId;
@@ -26,7 +28,10 @@ class Conversation {
     };
 
     // Create conversation in the database
-    const response = await apiService.post("/conversations", conversationData);
+    const response = await apiService.post(
+      Conversation.apiRoute,
+      conversationData
+    );
     return new Conversation(response);
   }
 
@@ -36,9 +41,12 @@ class Conversation {
 
   async addDuration(time) {
     const newDuration = this.duration + time;
-    const response = await apiService.put(`/conversations/${this.id}`, {
-      duration: newDuration,
-    });
+    const response = await apiService.put(
+      `${Conversation.apiRoute}/${this.id}`,
+      {
+        duration: newDuration,
+      }
+    );
 
     if (!response.duration) {
       throw new Error("Failed to update conversation duration");

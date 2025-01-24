@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import User from "../models/User";
 import { useRouter, usePathname } from "next/navigation";
+
+import User from "@/app/lib/models/User";
 
 export function useCurrentUser() {
   const [user, setUser] = useState(null);

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { authService } from "@/app/services/api";
+import { authService } from "@/app/lib/services/api";
 import { useRouter } from "next/navigation";
+import { pages } from "@/app/lib/routes";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -19,7 +20,7 @@ export function Login() {
       const { user, token } = await authService.login(email);
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem("token", token);
-      router.push("/conversation");
+      router.push(pages.conversations);
     } catch (err) {
       setError(err.message || "Login failed. Please try again.");
     } finally {

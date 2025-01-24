@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from "@/app/lib/models/User";
 
 const API_BASE_URL = "/api";
 

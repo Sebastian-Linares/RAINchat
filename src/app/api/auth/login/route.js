@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import AuthService from "@/app/services/authService";
+import AuthService from "@/app/api/services/authService";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key"; // Make sure to set this in .env
 

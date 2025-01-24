@@ -1,5 +1,5 @@
-import mongoClientPromise from "../lib/mongodb";
-import User from "../models/User";
+import mongoClientPromise from "@/app/api/services/mongodb";
+import User from "@/app/lib/models/User";
 
 export class AuthService {
   static async login(email) {

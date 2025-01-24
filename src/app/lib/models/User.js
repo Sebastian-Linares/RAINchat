@@ -5,15 +5,6 @@ class User {
     this.email = email;
   }
 
-  // Method to create a new user instance
-  static create({ name, email }) {
-    if (!name || !email) {
-      throw new Error("Name and email are required");
-    }
-
-    return new User({ name, email });
-  }
-
   static fromJson(json) {
     return new User(json);
   }

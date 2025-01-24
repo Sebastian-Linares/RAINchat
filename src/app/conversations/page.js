@@ -1,4 +1,4 @@
-import { Conversation } from '../components/Conversation';
+import { Conversation } from "@/app/components/Conversation";
 
 export default function ConversationPage() {
   return (
@@ -6,4 +6,4 @@ export default function ConversationPage() {
       <Conversation />
     </div>
   );
-} 
+}

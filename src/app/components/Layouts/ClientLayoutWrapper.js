@@ -1,8 +1,9 @@
 "use client";
 
-import { useCurrentUser } from "../../hooks/useCurrentUser";
-import { LoggedInLayout } from "./LoggedInLayout";
 import { usePathname } from "next/navigation";
+
+import { LoggedInLayout } from "@/app/components/Layouts/LoggedInLayout";
+import { useCurrentUser } from "@/app/lib/hooks/useCurrentUser";
 
 export function ClientLayoutWrapper({ children }) {
   const { user, loading } = useCurrentUser();

@@ -2,21 +2,23 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Login } from "../components/Login";
-import { useCurrentUser } from "../hooks/useCurrentUser";
+
+import { Login } from "@/app/components/Login";
+import { useCurrentUser } from "@/app/lib/hooks/useCurrentUser";
+import { pages } from "@/app/lib/routes";
 export default function Home() {
   const router = useRouter();
-  const { user, loading, error } = useCurrentUser();
+  const { user, loading } = useCurrentUser();
 
   useEffect(() => {
     if (user) {
-      router.push("/conversation");
+      router.push(pages.conversations);
     }
   }, [user, router]);
 
   const handleLogin = (user) => {
     if (user) {
-      router.push("/conversation");
+      router.push(pages.conversations);
     }
   };
 

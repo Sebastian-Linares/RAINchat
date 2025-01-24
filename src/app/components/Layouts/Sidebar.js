@@ -1,5 +1,4 @@
-import { useCurrentUser } from "@/app/hooks/useCurrentUser";
-import { useRouter } from "next/navigation";
+import { useCurrentUser } from "@/app/lib/hooks/useCurrentUser";
 
 export function Sidebar() {
   const { logout } = useCurrentUser();

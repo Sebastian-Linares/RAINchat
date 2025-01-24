@@ -4,9 +4,9 @@ import { useConversation } from "@11labs/react";
 import { useCallback, useState, useEffect } from "react";
 import { Header } from "./Header";
 import { TranscriptView } from "./TranscriptView";
-import { useCurrentUser } from "@/app/hooks/useCurrentUser";
-import ConversationModel from "@/app/models/Conversation";
-import { useTimer } from "@/app/hooks/useTimer";
+import { useCurrentUser } from "@/app/lib/hooks/useCurrentUser";
+import ConversationModel from "@/app/lib/models/Conversation";
+import { useTimer } from "@/app/lib/hooks/useTimer";
 
 export function Conversation() {
   const [transcript, setTranscript] = useState([]);
