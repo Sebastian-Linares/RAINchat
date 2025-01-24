@@ -22,6 +22,7 @@ export function useCurrentUser() {
           localStorage.removeItem("user");
           localStorage.removeItem("token");
           setUser(null);
+          router.push("/login");
         }
       } catch (err) {
         setError(err.message);
@@ -34,7 +35,7 @@ export function useCurrentUser() {
     }
 
     fetchUser();
-  }, []);
+  }, [router]);
 
   const logout = () => {
     localStorage.removeItem("user");

@@ -7,7 +7,6 @@ export default function Home() {
   const router = useRouter();
 
   const handleLogin = (user) => {
-    console.log(user);
     if (user) {
       router.push("/conversation");
     }

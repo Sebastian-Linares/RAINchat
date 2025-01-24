@@ -1,9 +1,15 @@
-export function Header({ status, isSpeaking, onStart, onStop }) {
+export function Header({ status, isSpeaking, onStart, onStop, duration }) {
   return (
     <header className="flex items-center justify-between mb-6">
       <div className="flex items-center space-x-4">
         <h1 className="text-2xl font-bold">Conversation</h1>
         <div className="text-sm text-gray-400">Status: {status}</div>
+      </div>
+
+      <div className="flex items-center space-x-4">
+        <div className="text-sm text-gray-400">
+          Duration: {duration} seconds
+        </div>
       </div>
 
       <div className="flex items-center space-x-4">

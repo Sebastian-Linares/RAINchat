@@ -1,28 +1,79 @@
 "use client";
 
 import { useConversation } from "@11labs/react";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { Header } from "./Header";
 import { TranscriptView } from "./TranscriptView";
+import { useCurrentUser } from "@/app/hooks/useCurrentUser";
+import ConversationModel from "@/app/models/Conversation";
+import { useTimer } from "@/app/hooks/useTimer";
 
 export function Conversation() {
   const [transcript, setTranscript] = useState([]);
+  const { user } = useCurrentUser();
+  const [currentConversation, setCurrentConversation] = useState(null);
+  const timer = useTimer();
 
-  const conversation = useConversation({
-    onConnect: () => console.log("Connected"),
-    onDisconnect: () => console.log("Disconnected"),
+  const aiConversation = useConversation({
+    onConnect: () => {
+      console.log("Connected");
+      timer.reset();
+      timer.start();
+    },
+    onDisconnect: () => {
+      timer.stop();
+      timer.reset();
+      setCurrentConversation(null);
+      setTranscript([]);
+      console.log("Disconnected");
+    },
     onMessage: (message) => {
       console.log("Message:", message);
       setTranscript((prev) => [...prev, { role: "agent", content: message }]);
     },
-    onError: (error) => console.error("Error:", error),
+    onError: (error) => {
+      console.error("Error:", error);
+      timer.stop();
+      timer.reset();
+      setCurrentConversation(null);
+      setTranscript([]);
+    },
   });
+
+  // Update duration display every second, but only update 11labsConversation every 10 seconds
+  useEffect(() => {
+    if (
+      aiConversation.status === "connected" &&
+      Math.floor(timer.time) % 10 === 0 &&
+      timer.time > 0
+    ) {
+      currentConversation
+        .addDuration(10)
+        .then(() => {
+          console.log("Duration updated:");
+        })
+        .catch((error) => {
+          console.error("Failed to update conversation duration:", error);
+        });
+    }
+  }, [aiConversation, timer, currentConversation]);
 
   const startConversation = useCallback(async () => {
     try {
+      if (!user || aiConversation.status === "connected") return;
+
+      const agentId = "xfUT2HAJEFqMxhXVCF3J";
+
+      // Create conversation in database
+      const newConversation = await ConversationModel.create({
+        userId: user.id,
+        agentId,
+      });
+      setCurrentConversation(newConversation);
+
       // Start audio
       await navigator.mediaDevices.getUserMedia({ audio: true });
-      await conversation.startSession({ agentId: "xfUT2HAJEFqMxhXVCF3J" });
+      await aiConversation.startSession({ agentId });
     } catch (error) {
       console.error("Failed to start conversation:", error);
       // Show error to user
@@ -34,30 +85,32 @@ export function Conversation() {
         },
       ]);
     }
-  }, [conversation]);
+  }, [aiConversation, user]);
 
   const stopConversation = useCallback(async () => {
     try {
-      await conversation.endSession();
+      await aiConversation.endSession();
+      setCurrentConversation(null);
     } catch (error) {
       console.error("Failed to stop conversation:", error);
     }
-  }, [conversation]);
+  }, [aiConversation]);
 
   return (
     <div className="flex h-screen bg-black text-gray-200">
       <main className="flex-1 p-6 flex flex-col bg-black">
         <Header
-          status={conversation.status}
-          isSpeaking={conversation.isSpeaking}
+          status={aiConversation.status}
+          isSpeaking={aiConversation.isSpeaking}
           onStart={startConversation}
           onStop={stopConversation}
+          duration={timer.time}
         />
 
         <div className="flex-1 overflow-y-auto bg-gray-900 rounded border border-gray-800 p-4 space-y-3">
           <TranscriptView
             transcript={transcript}
-            status={conversation.status}
+            status={aiConversation.status}
             onStop={stopConversation}
             onStart={startConversation}
           />
