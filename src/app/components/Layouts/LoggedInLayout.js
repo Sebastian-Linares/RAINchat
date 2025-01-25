@@ -1,9 +1,9 @@
 import { Sidebar } from "@/app/components/Layouts/Sidebar";
 
-export function LoggedInLayout({ children }) {
+export function LoggedInLayout({ user, children }) {
   return (
     <div className="flex h-screen">
-      <Sidebar />
+      <Sidebar monthlyDuration={user.monthlyDuration} />
       <main className="flex-1 overflow-auto">{children}</main>
     </div>
   );

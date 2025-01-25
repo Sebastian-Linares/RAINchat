@@ -25,7 +25,7 @@ export function ClientLayoutWrapper({ children }) {
   }
 
   return user && !isPublicPath ? (
-    <LoggedInLayout>{children}</LoggedInLayout>
+    <LoggedInLayout user={user}>{children}</LoggedInLayout>
   ) : (
     children
   );

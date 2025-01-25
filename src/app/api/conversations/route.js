@@ -27,9 +27,6 @@ export async function POST(request) {
     return NextResponse.json(conversation.toJson());
   } catch (error) {
     console.error("Error creating conversation:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 }

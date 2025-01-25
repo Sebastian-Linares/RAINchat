@@ -2,6 +2,7 @@ import { ObjectId } from "mongodb";
 
 import mongoClientPromise from "@/app/api/services/mongodb";
 import Conversation from "@/app/lib/models/Conversation";
+import UserService from "@/app/api/services/userService";
 
 export class ConversationsService {
   static async create({ userId, agentId, startAt, duration, createdAt }) {
@@ -9,8 +10,16 @@ export class ConversationsService {
     const db = client.db();
     const conversations = db.collection("conversations");
 
+    let totalDurationThisMonth =
+      await ConversationsService.getUserMonthlyDuration(userId);
+
+    // If total duration is greater than 20 hours, throw an error
+    if (totalDurationThisMonth > 20 /** 60 * 60 * 1000*/) {
+      throw new Error("User has exceeded the maximum duration for this month");
+    }
+
     const conversation = {
-      userId: new ObjectId(userId),
+      userId: userId,
       agentId,
       startAt: new Date(startAt),
       duration,
@@ -39,6 +48,38 @@ export class ConversationsService {
     );
 
     return duration;
+  }
+
+  static async getUserMonthlyDuration(userId) {
+    const client = await mongoClientPromise;
+    const db = client.db();
+    const conversations = db.collection("conversations");
+
+    console.log("userId", userId.toString());
+
+    let totalDurationThisMonth = await conversations
+      .aggregate([
+        {
+          $match: {
+            // userId: new ObjectId(userId),
+            createdAt: {
+              $gte: new Date(new Date().setMonth(new Date().getMonth() - 1)),
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$userId",
+            totalDuration: { $sum: "$duration" },
+          },
+        },
+      ])
+      .toArray();
+
+    console.log(totalDurationThisMonth);
+    totalDurationThisMonth = totalDurationThisMonth[0]?.totalDuration || 0;
+
+    return totalDurationThisMonth;
   }
 }
 

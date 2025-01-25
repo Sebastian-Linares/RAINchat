@@ -1,5 +1,6 @@
 import mongoClientPromise from "@/app/api/services/mongodb";
 import User from "@/app/lib/models/User";
+import ConversationsService from "./conversationsService";
 
 export class AuthService {
   static async login(email) {
@@ -13,11 +14,15 @@ export class AuthService {
       throw new Error("User not found");
     }
 
+    const userMonthlyDuration =
+      await ConversationsService.getUserMonthlyDuration(userDoc._id.toString());
+
     // Create user instance
     const user = new User({
       id: userDoc._id,
       name: userDoc.name,
       email: userDoc.email,
+      monthlyDuration: userMonthlyDuration,
     });
 
     return {

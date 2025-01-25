@@ -28,11 +28,7 @@ export async function POST(request) {
     });
 
     return NextResponse.json({
-      user: {
-        id: user.id,
-        email: user.email,
-        createdAt: user.createdAt,
-      },
+      user: user.toJson(),
       token,
     });
   } catch (error) {

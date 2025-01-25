@@ -65,17 +65,21 @@ export function Conversation() {
       const agentId = "xfUT2HAJEFqMxhXVCF3J";
 
       // Create conversation in database
-      const newConversation = await ConversationModel.create({
-        userId: user.id,
-        agentId,
-      });
-      setCurrentConversation(newConversation);
+      try {
+        const newConversation = await ConversationModel.create({
+          userId: user.id,
+          agentId,
+        });
+        setCurrentConversation(newConversation);
+      } catch (error) {
+        alert("Failed to start conversation: " + error.message);
+        return;
+      }
 
       // Start audio
       await navigator.mediaDevices.getUserMedia({ audio: true });
       await aiConversation.startSession({ agentId });
     } catch (error) {
-      console.error("Failed to start conversation:", error);
       // Show error to user
       setTranscript((prev) => [
         ...prev,
