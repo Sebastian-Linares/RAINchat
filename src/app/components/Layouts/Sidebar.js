@@ -4,8 +4,6 @@ import { useCurrentUser } from "@/app/lib/hooks/useCurrentUser";
 export function Sidebar({ monthlyDuration }) {
   const { logout } = useCurrentUser();
 
-  console.log(monthlyDuration);
-
   return (
     <aside className="w-64 bg-gray-900 p-4 flex flex-col">
       <h2 className="text-xl font-bold mb-4">Rain Chat</h2>

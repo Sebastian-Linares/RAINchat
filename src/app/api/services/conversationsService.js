@@ -55,8 +55,6 @@ export class ConversationsService {
     const db = client.db();
     const conversations = db.collection("conversations");
 
-    console.log("userId", userId.toString());
-
     let totalDurationThisMonth = await conversations
       .aggregate([
         {
@@ -76,7 +74,6 @@ export class ConversationsService {
       ])
       .toArray();
 
-    console.log(totalDurationThisMonth);
     totalDurationThisMonth = totalDurationThisMonth[0]?.totalDuration || 0;
 
     return totalDurationThisMonth;
