@@ -2,7 +2,6 @@ import { ObjectId } from "mongodb";
 
 import mongoClientPromise from "@/app/api/services/mongodb";
 import Conversation from "@/app/lib/models/Conversation";
-import UserService from "@/app/api/services/userService";
 
 export class ConversationsService {
   static async create({ userId, agentId, startAt, duration, createdAt }) {
