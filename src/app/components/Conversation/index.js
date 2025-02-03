@@ -54,7 +54,7 @@ export function Conversation() {
       setCurrentConversation(null);
       setTranscript([]);
     }
-  }, [searchParams, activeAgent]);
+  }, [searchParams, activeAgent, timer]);
 
   // Update duration display every second, but only update 11labsConversation every 10 seconds
   useEffect(() => {
