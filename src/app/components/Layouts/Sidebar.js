@@ -1,5 +1,8 @@
 import { timeHelpers } from "@/app/lib/helpers/timeHelpers";
 import { useCurrentUser } from "@/app/lib/hooks/useCurrentUser";
+import { agents } from "@/app/lib/agents";
+import Link from "next/link";
+import { pages } from "@/app/lib/routes";
 
 export function Sidebar({ monthlyDuration }) {
   const { logout } = useCurrentUser();
@@ -14,6 +17,17 @@ export function Sidebar({ monthlyDuration }) {
             {timeHelpers.secondsToMinutes(monthlyDuration)} m
           </span>
         </div>
+        <br />
+        {/* Links to change the active agent */}
+        {agents.map((agent) => (
+          <Link
+            key={agent.id}
+            href={`${pages.conversations}?agentId=${agent.id}`}
+            className={`block py-2 px-4 rounded-md bg-gray-800 text-gray-400 hover:bg-gray-700`}
+          >
+            {agent.name}
+          </Link>
+        ))}
       </div>
       <button
         onClick={logout}

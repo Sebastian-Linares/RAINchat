@@ -28,13 +28,5 @@ export function useTimer() {
     setIsActive(false);
   };
 
-  // Add event listener helper
-  const onTick = (callback) => {
-    timerEventEmitter.addEventListener("timerTick", (e) => callback(e.detail));
-    return () => {
-      timerEventEmitter.removeEventListener("timerTick", callback);
-    };
-  };
-
-  return { time, isActive, start, stop, reset, onTick };
+  return { time, isActive, start, stop, reset };
 }

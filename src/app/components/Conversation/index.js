@@ -7,12 +7,16 @@ import { TranscriptView } from "./TranscriptView";
 import { useCurrentUser } from "@/app/lib/hooks/useCurrentUser";
 import ConversationModel from "@/app/lib/models/Conversation";
 import { useTimer } from "@/app/lib/hooks/useTimer";
+import { useSearchParams } from "next/navigation";
+import { agents } from "@/app/lib/agents";
 
 export function Conversation() {
   const [transcript, setTranscript] = useState([]);
   const { user } = useCurrentUser();
   const [currentConversation, setCurrentConversation] = useState(null);
   const timer = useTimer();
+  const [activeAgent, setActiveAgent] = useState(agents[0]);
+  const searchParams = useSearchParams();
 
   const aiConversation = useConversation({
     onConnect: () => {
@@ -40,6 +44,18 @@ export function Conversation() {
     },
   });
 
+  useEffect(() => {
+    const agentId = searchParams.get("agentId");
+    if (agentId) {
+      setActiveAgent(agents.find((agent) => agent.id === agentId));
+      console.log("Active agent:", activeAgent);
+      timer.stop();
+      timer.reset();
+      setCurrentConversation(null);
+      setTranscript([]);
+    }
+  }, [searchParams, activeAgent]);
+
   // Update duration display every second, but only update 11labsConversation every 10 seconds
   useEffect(() => {
     if (
@@ -62,7 +78,7 @@ export function Conversation() {
     try {
       if (!user || aiConversation.status === "connected") return;
 
-      const agentId = "xfUT2HAJEFqMxhXVCF3J";
+      const agentId = activeAgent.id;
 
       // Create conversation in database
       try {
@@ -89,7 +105,7 @@ export function Conversation() {
         },
       ]);
     }
-  }, [aiConversation, user]);
+  }, [aiConversation, user, activeAgent]);
 
   const stopConversation = useCallback(async () => {
     try {
@@ -110,8 +126,10 @@ export function Conversation() {
           onStop={stopConversation}
           duration={timer.time}
         />
-
         <div className="flex-1 overflow-y-auto bg-gray-900 rounded border border-gray-800 p-4 space-y-3">
+          <div className="flex items-center space-x-2">
+            <h3 className="text-lg font-semibold">{activeAgent.name}</h3>
+          </div>
           <TranscriptView
             transcript={transcript}
             status={aiConversation.status}

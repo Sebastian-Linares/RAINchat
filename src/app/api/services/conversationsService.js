@@ -14,7 +14,7 @@ export class ConversationsService {
       await ConversationsService.getUserMonthlyDuration(userId);
 
     // If total duration is greater than 20 hours, throw an error
-    if (totalDurationThisMonth > 20 /** 60 * 60 * 1000*/) {
+    if (totalDurationThisMonth > 20 * 60 * 60 * 1000) {
       throw new Error("User has exceeded the maximum duration for this month");
     }
 
